@@ -62,3 +62,16 @@ func TestInvalidCharInHeaderKey(t *testing.T) {
 	assert.Equal(t, 0, n)
 	assert.False(t, done)
 }
+
+func TestMultipleHeaderValues(t *testing.T) {
+	headers := NewHeaders()
+	data := []byte("Host: localhost:42069\r\n\r\n")
+	n, done, err := headers.Parse(data)
+	data = []byte("Host: localhost:1337\r\n\r\n")
+	n, done, err = headers.Parse(data)
+	require.NoError(t, err)
+	require.NotNil(t, headers)
+	assert.Equal(t, "localhost:42069, localhost:1337", headers["host"])
+	assert.Equal(t, 22, n)
+	assert.False(t, done)
+}

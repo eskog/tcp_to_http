@@ -31,7 +31,13 @@ func (h Headers) Parse(data []byte) (n int, done bool, err error) {
 		fmt.Print("Error")
 		return 0, false, errors.New("malformed header key value")
 	}
-	h[k] = v
+
+	if _, exists := h[k]; exists {
+		h[k] += ", " + v
+	} else {
+		h[k] = v
+	}
+
 	//return len(data) - 2, false, nil
 	log.Println(h)
 	return len(k) + len(v) + 4, false, nil
