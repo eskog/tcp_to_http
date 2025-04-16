@@ -44,7 +44,7 @@ func TestValidHeaderExtraWhitespace(t *testing.T) {
 
 func TestValidHeaderWithCapitals(t *testing.T) {
 	headers := NewHeaders()
-	data := []byte("Host: localhost:42069\r\n\r\n")
+	data := []byte("HOST: localhost:42069\r\n\r\n")
 	n, done, err := headers.Parse(data)
 	require.NoError(t, err)
 	require.NotNil(t, headers)
@@ -66,9 +66,9 @@ func TestInvalidCharInHeaderKey(t *testing.T) {
 func TestMultipleHeaderValues(t *testing.T) {
 	headers := NewHeaders()
 	data := []byte("Host: localhost:42069\r\n\r\n")
-	n, done, err := headers.Parse(data)
+	headers.Parse(data)
 	data = []byte("Host: localhost:1337\r\n\r\n")
-	n, done, err = headers.Parse(data)
+	n, done, err := headers.Parse(data)
 	require.NoError(t, err)
 	require.NotNil(t, headers)
 	assert.Equal(t, "localhost:42069, localhost:1337", headers["host"])
